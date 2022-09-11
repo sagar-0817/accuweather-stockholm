@@ -33,5 +33,5 @@ jobs:
           git config --global user.name 'GitHub Action'
           git config --global user.email 'github-action@github.com'
           git add .
-          git commit -m "Update the file with latest data (Automated Commit)"
+          git commit -m "Update the avro file with the latest weather data (Automated Commit)"
           git push
