@@ -1,0 +1,37 @@
+name: Run the scraping script and Commit changes automatically
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # run every day at 00:00
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout repo content
+        uses: actions/checkout@v2 # checkout the repository content to github runner
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8' # install the python version needed
+          
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Run the Python script # run main.py
+        env:
+          ACCUWEATHER_API_KEY: ${{ secrets.ACCUWEATHER_API_KEY }}
+        run: python main.py
+
+      - name: Commit changes # commit the latest changes
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'github-action@github.com'
+          git add .
+          git commit -m "Update the file with latest data (Automated Commit)"
+          git push
